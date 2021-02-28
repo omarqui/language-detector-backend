@@ -1,5 +1,6 @@
 const home = require('./controllers/home.controller');
 const route404 = require('./controllers/404.controller');
+const parcer = require('./controllers/parser.controller');
 
 const redirectTo = location => {
     return (req, res) => {
@@ -24,6 +25,9 @@ const routes = (req, res) => {
             break;
         case '/404':
             handler = route404;
+            break;
+        case '/parcer/':
+            handler = parcer;
             break;
         default:
             handler = redirectTo('/404')
