@@ -1,11 +1,8 @@
 const http = require("http");
 const { PORT } = process.env;
 
-const createServer = () => {
-    const server = http.createServer((req,res)=>{
-        res.write("Welcone");
-        res.end();
-    });
+const createServer = routesHandler => {
+    const server = http.createServer(routesHandler);
 
     server.listen(PORT, () => {
         console.log(`Server on port ${PORT}`);
