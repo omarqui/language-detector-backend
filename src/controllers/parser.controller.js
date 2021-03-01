@@ -7,12 +7,23 @@ const parcerHandler = async (req, res) => {
 
     const words = q.split(/ |%/);
 
-    console.log(words);
     const wordsDB = await Word.find({
         '_id': { $in: words }
     });
 
-    console.log(wordsDB);
+    const languageResume = {}
+
+    wordsDB.map(word => {
+        word.languages.forEach(lang => {
+            if (!languageResume['total']) languageResume['total'] = { lang: 'total', count: 0 };
+            if (!languageResume[lang]) languageResume[lang] = { lang: lang, count: 0 };
+            languageResume[lang].count++;
+            languageResume['total'].count++;
+        });
+    });
+
+    languageResumeList = Object.values(languageResume);
+        
     res.write("parser");
 };
 
