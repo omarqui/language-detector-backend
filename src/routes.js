@@ -16,7 +16,7 @@ addRouteProxi([
 ], redirectTo('/'));
 addRouteProxi(['/'], home);
 addRouteProxi(['/404'], controller404);
-addRouteProxi([/\/parcer\?*/], parcer);
+addRouteProxi([/\/parser\?*/], parcer);
 
 const routesHandlers = (req, res) => {
     let shouldReturnDefaultEnpoint = true;
