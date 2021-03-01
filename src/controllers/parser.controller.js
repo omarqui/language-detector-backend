@@ -1,7 +1,14 @@
+const url = require('url');
 const parcerHandler = (req,res)=>{
-    if(req.method != 'POST') return;
+    const queryObject = url.parse(req.url,true).query;
+    const { q } = queryObject;
 
-    res.write("Ta tan!");
+    if (q == undefined) return;
+
+    const words = q.split(" ");
+    console.log(words);
+
+    res.write("parcer");
 };
 
 module.exports = parcerHandler;
