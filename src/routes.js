@@ -16,17 +16,17 @@ addRouteProxi([
 ], redirectTo('/'));
 addRouteProxi(['/'], home);
 addRouteProxi(['/404'], controller404);
-addRouteProxi([/\/parcer\?*/], parcer);
+addRouteProxi([/\/parser\?*/], parcer);
 
-const routesHandlers = (req, res) => {
-    let shouldReturnDefaultEnpoint = true;
-    
+const routesHandlers = async (req, res) => {
+    let handler;
     if (req.method !== 'GET') {
         redirectTo('/404')(req, res);
         res.end();
         return;
     }
-    routesList.map(route => {
+
+    routesList.some(route => {
         const findEndPoint = endPoint => {
             const url = req.url;
             
@@ -39,15 +39,17 @@ const routesHandlers = (req, res) => {
         }
 
         if (route.endPoints.find(findEndPoint)) {
-            route.controller(req, res);
-            shouldReturnDefaultEnpoint = false;
+            handler = route.controller;
+            return true;
         }
     });
 
-    if (shouldReturnDefaultEnpoint) {
-        redirectTo('/404')(req, res);
-        res.end();  
+    if (handler == undefined) {
+        handler = redirectTo('/404');
     }    
+    
+    await handler(req, res);
+    res.end();  
 }
 
 module.exports = routesHandlers;
