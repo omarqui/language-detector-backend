@@ -1,30 +1,64 @@
-const Word = require('../models/Word')
 const url = require('url');
+const renderPage = require('../helpers/renderPage');
+const getWords = require('../services/words.service');
+
 const parcerHandler = async (req, res) => {
     const queryObject = url.parse(req.url, true).query;
-    const { q } = queryObject;
-    if (q == undefined) return;
 
-    const words = q.split(/ |%/);
+    let result = '',
+        textSearched = '';
 
-    const wordsDB = await Word.find({
-        '_id': { $in: words }
+    if (queryObject.q !== undefined) {
+        textSearched = queryObject.q.replace(/\+/g, ' ');
+        result = await detectLanguage(textSearched);
+    }
+
+    renderPage(res, "parser", {
+        result,
+        textSearched
     });
+};
 
-    const languageResume = {}
+const detectLanguage = async text => {
+    const words = text.split(' ');
+    const knowedWords = await getWords(words);
 
-    wordsDB.map(word => {
+    if (knowedWords.length == 0) return 'Sorry, language not detected!';
+
+    const languageGroups = groupWordByLanguage(knowedWords);
+    const accuracies = calculateAccuracy(languageGroups, words.length);
+    const firstLanguage = getFirstLanguage(accuracies);
+
+    return `This text is ${firstLanguage.lang} with ${firstLanguage.accuracy * 100}% accurancy`;
+}
+
+const groupWordByLanguage = words => {
+    const languageGroups = {};
+    words.map(word => {
         word.languages.forEach(lang => {
-            if (!languageResume['total']) languageResume['total'] = { lang: 'total', count: 0 };
-            if (!languageResume[lang]) languageResume[lang] = { lang: lang, count: 0 };
-            languageResume[lang].count++;
-            languageResume['total'].count++;
+            if (!languageGroups[lang])
+                languageGroups[lang] = { lang: lang, count: 0 };
+            languageGroups[lang].count++;
         });
     });
 
-    languageResumeList = Object.values(languageResume);
-        
-    res.write("parser");
-};
+    return languageGroups;
+}
+
+const calculateAccuracy = (languageGroups, totalWords) => {
+    const languageResumeList = Object.values(languageGroups);
+
+    return languageResumeList.map(resume => {
+        return {
+            ...resume,
+            accuracy: (resume.count / totalWords)
+        };
+    });
+}
+
+const getFirstLanguage = accuracies => {
+    return accuracies.reduce((prev, current) =>
+        prev.accuracy > current.accuracy ? prev : current)
+}
 
 module.exports = parcerHandler;
