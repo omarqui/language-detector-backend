@@ -1,5 +1,3 @@
-# Untitled
-
 ## Arquitecta de la solución
 
 Al momento de de seleccionar la arquitectura para esta funcionalidad, he tomado en consideración los siguientes puntos:
