@@ -10,12 +10,19 @@
 <style>
     .container {
         margin: auto;
-        width: 50%;        
-        padding: 1rem;
+        width: 50%;
+        padding: 1rem;        
+        text-align: center;
     }
 
     .div-resul {
         margin-top: 2rem;
+    }
+
+    .search {
+        height: 4rem;
+        width: 400px;
+        margin-bottom: 1rem;
     }
 </style>
 
@@ -23,8 +30,13 @@
     <div class="container">
         <h1>Language Detector</h1>
         <form action="/parser/" method="get">
-            <input type="text" name="q" id="textToDetect" value="||textSearched||">
-            <input type="submit" value="Detect language">
+            <div>
+                <textarea class="search" type="text" name="q" id="textToDetect" >||textSearched||</textarea>
+            </div>
+
+            <div class="btnSeach">
+                <input type="submit" value="Detect language">
+            </div>
         </form>
         <div class="div-resul">||result||</div>
     </div>
