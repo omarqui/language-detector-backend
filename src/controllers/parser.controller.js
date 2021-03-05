@@ -29,7 +29,7 @@ const detectLanguage = async text => {
     const accuracies = calculateAccuracy(languageGroups, words.length);
     const firstLanguage = getFirstLanguage(accuracies);
 
-    return `This text is ${firstLanguage.lang} with ${firstLanguage.accuracy * 100}% accurancy`;
+    return `This text is ${getLanguageName(firstLanguage.lang)} with ${firstLanguage.accuracy * 100}% accurancy`;
 }
 
 const groupWordByLanguage = words => {
@@ -59,6 +59,20 @@ const calculateAccuracy = (languageGroups, totalWords) => {
 const getFirstLanguage = accuracies => {
     return accuracies.reduce((prev, current) =>
         prev.accuracy > current.accuracy ? prev : current)
+}
+
+
+function getLanguageName(lang) {
+    switch (lang) {
+        case "eng":
+            return "English";
+        case "esp":
+            return "Spanish";
+        case "fre":
+            return "French";
+        default:
+            return "";
+    }
 }
 
 module.exports = parcerHandler;

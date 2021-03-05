@@ -9,13 +9,15 @@ const addRouteProxi = (endPoints, constructor) =>
     addRoute(routesList, endPoints, constructor);
 
 addRouteProxi([
-    `/home`,
     '/index',
     '/home.html',
     '/index.html'
-], redirectTo('/'));
-addRouteProxi(['/'], home);
+], redirectTo('/home'));
+addRouteProxi(['/home'], home);
 addRouteProxi(['/404'], controller404);
+addRouteProxi([
+    '/',    
+], redirectTo('/parser'));
 addRouteProxi([/\/parser\?*/], parcer);
 
 const routesHandlers = async (req, res) => {

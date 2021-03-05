@@ -7,13 +7,27 @@
     <title>Language Detector</title>
 </head>
 
+<style>
+    .container {
+        margin: auto;
+        width: 50%;        
+        padding: 1rem;
+    }
+
+    .div-resul {
+        margin-top: 2rem;
+    }
+</style>
+
 <body>
-    <h1>Language Detector</h1>
-    <form action="/parser/" method="get">
-        <input type="text" name="q" id="textToDetect" value="||textSearched||">
-        <input type="submit" value="Detect language">        
-    </form>
-    <div>||result||</div>
+    <div class="container">
+        <h1>Language Detector</h1>
+        <form action="/parser/" method="get">
+            <input type="text" name="q" id="textToDetect" value="||textSearched||">
+            <input type="submit" value="Detect language">
+        </form>
+        <div class="div-resul">||result||</div>
+    </div>
 </body>
 
 </html>
